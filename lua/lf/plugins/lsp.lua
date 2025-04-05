@@ -68,7 +68,6 @@ return {
                     border = 'rounded',
                 }),
                 documentation = cmp.config.window.bordered({
-                    border = 'rounded',
                 })
             },
             performance = {
@@ -105,14 +104,15 @@ return {
             },
         })
 
-        for _, method in ipairs({ 'textDocument/diagnostic', 'workspace/diagnostic' }) do
-            local default_diagnostic_handler = vim.lsp.handlers[method]
-            vim.lsp.handlers[method] = function(err, result, context, config)
-                if err ~= nil and err.code == -32802 then
-                    return
-                end
-                return default_diagnostic_handler(err, result, context, config)
-            end
-        end
+
+        vim.keymap.set('i', '<C-p>', cmp.mapping.select_prev_item(cmp_select), {})
+        vim.keymap.set('i', '<C-n>', cmp.mapping.select_next_item(cmp_select), {})
+        vim.keymap.set('i', '<C-y>', cmp.mapping.confirm({ select = true }), {})
+        vim.keymap.set('i', '<C-a>', cmp.mapping.confirm({ select = true }), {})
+        vim.keymap.set('i', '<C-Space>', cmp.mapping.complete(), {})
+
+        vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.hover({ border = "single" })<CR>', { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('n', '<leader>le', '<cmd>lua vim.diagnostic.open_float(nil, { focus = false })<CR>', { noremap = true, silent = true })
     end
 }

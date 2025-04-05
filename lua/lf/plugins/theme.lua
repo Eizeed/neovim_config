@@ -1,10 +1,9 @@
 function ColorMyPencils(color)
-    color = "onedark" or "github_dark_dimmed"
+    color = "onedark"
     vim.cmd.colorscheme(color)
 
     vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
     vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-
 end
 
 return {
@@ -35,12 +34,17 @@ return {
 
                 -- Lualine options --
                 lualine = {
-                    transparent = false, -- lualine center bar transparency
+                    transparent = true, -- lualine center bar transparency
                 },
 
                 -- Custom Highlights --
-                colors = {}, -- Override default colors
-                highlights = {}, -- Override highlight groups
+                colors = {
+                    c_pink = "#ff66fa",
+                    c_green = "#00aa12"
+                },
+                highlights = {
+                    ["@comment"] = { fg = '$c_pink' },
+                },
 
                 -- Plugins Config --
                 diagnostics = {
@@ -49,48 +53,6 @@ return {
                     background = true,    -- use background color for virtual text
                 },
             }
-        end
-    },
-    {
-        'projekt0n/github-nvim-theme',
-        name = 'github-theme',
-        lazy = false, -- make sure we load this during startup if it is your main colorscheme
-        priority = 1000, -- make sure to load this before all the other start plugins
-        config = function()
-            require('github-theme').setup({
-                -- ...
-            })
-            vim.cmd('colorscheme github_dark')
-        end,
-    },
-    {
-        "rose-pine/neovim",
-        name = "rose-pine",
-
-        config = function()
-            vim.cmd("colorscheme rose-pine")
-            require('rose-pine').setup({
-                disable_background = true
-            })
-
-            ColorMyPencils()
-        end
-    },
-    {
-        "folke/tokyonight.nvim",
-
-        config = function()
-            require("tokyonight").setup({
-                style = "storm",
-                transparent = true,
-                terminal_colors = true,
-                styles = {
-                    comments = { italic = false },
-                    keywords = { italic = false },
-                    sidebars = "dark",
-                    floats = "dark",
-                },
-            })
             ColorMyPencils()
         end
     },
