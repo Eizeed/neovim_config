@@ -28,7 +28,7 @@ return {
             ensure_installed = {
                 "lua_ls",
                 "clangd",
-                "gopls",
+                -- "gopls",
                 "rust_analyzer"
             },
             handlers = {
@@ -83,36 +83,48 @@ return {
                 { name = 'nvim_lsp' },
                 { name = 'luasnip' }, -- For luasnip users.
             }, {
-                    { name = 'buffer' },
-                })
+                { name = 'buffer' },
+            })
         })
-
-
-        --        vim.api.nvim_set_keymap('n', '<leader>ld', '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true, silent = true })
-        --        vim.api.nvim_set_keymap('n', '<leader>le', '<cmd>lua vim.diagnostic.open_float(nil, { focus = false })<CR>', { noremap = true, silent = true })
 
         vim.diagnostic.config({
             update_in_insert = true,
             float = {
                 focusable = true,
                 refreshSupport = false,
-                style = "minimal",
-                border = "rounded",
-                source = "always",
-                header = "",
-                prefix = "",
+                -- style = "minimal",
+                -- border = "rounded",
+                -- source = "always",
+                -- header = "",
+                -- prefix = "",
             },
         })
 
 
-        vim.keymap.set('i', '<C-p>', cmp.mapping.select_prev_item(cmp_select), {})
-        vim.keymap.set('i', '<C-n>', cmp.mapping.select_next_item(cmp_select), {})
+        vim.keymap.set('i', '<C-p>', function()
+            if cmp.visible() then
+                cmp.mapping.select_prev_item(cmp_select)
+            end
+        end, { silent = true })
+        vim.keymap.set('i', '<C-n>', function()
+            if cmp.visible() then
+                cmp.mapping.select_next_item(cmp_select)
+            end
+        end, { silent = true })
         vim.keymap.set('i', '<C-y>', cmp.mapping.confirm({ select = true }), {})
         vim.keymap.set('i', '<C-a>', cmp.mapping.confirm({ select = true }), {})
-        vim.keymap.set('i', '<C-Space>', cmp.mapping.complete(), {})
+        vim.keymap.set('i', '<C-x>', cmp.mapping.complete(), {})
+        vim.keymap.set('n', '<C-p>', '<Nop>')
 
-        vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap = true, silent = true })
-        vim.api.nvim_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.hover({ border = "single" })<CR>', { noremap = true, silent = true })
-        vim.api.nvim_set_keymap('n', '<leader>le', '<cmd>lua vim.diagnostic.open_float(nil, { focus = false })<CR>', { noremap = true, silent = true })
+        vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap = true, silent = true })
+
+        vim.keymap.set('n', '<leader>k', function()
+                vim.lsp.buf.hover({ border = "solid" })
+            end,
+            { noremap = true, silent = true })
+
+        vim.keymap.set('n', '<leader>le', '<cmd>lua vim.diagnostic.open_float(nil, { focus = false })<CR>',
+            { noremap = true, silent = true })
+        -- vim.api.nvim_set_keymap('n', '<C-p>', '<Nop>', { noremap = true, silent = true })
     end
 }
